@@ -13,7 +13,7 @@ dp = Dispatcher(bot)
 @dp.message_handler(commands='start')
 async def answer_start_comand(message: types.Message):
     await message.answer(text=f'Привет!'
-                                f'\nЯ немножко тупенький, мало что умею...')
+                                f'\nЯ немножко тупенький пока, мало что умею...')
 
 @dp.message_handler(commands='help')
 async def answer_start_comand(message: types.Message):
