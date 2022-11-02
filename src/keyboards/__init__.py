@@ -1,1 +1,1 @@
-from .default import command_default_keyboard
+from .default import command_default_keyboard, command_delete_keyboard

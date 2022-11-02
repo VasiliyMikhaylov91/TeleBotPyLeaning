@@ -1,1 +1,1 @@
-from db_requests import Database
+from .db_requests import Database

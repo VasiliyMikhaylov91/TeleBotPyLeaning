@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
 
 command_default_keyboard = ReplyKeyboardMarkup (
@@ -8,6 +8,8 @@ command_default_keyboard = ReplyKeyboardMarkup (
             KeyboardButton(text='/help')
         ],
         [
+            KeyboardButton(text='/menu'),
+            KeyboardButton(text='/dk'),
             KeyboardButton(text='/add')
         ],
         [
@@ -16,3 +18,5 @@ command_default_keyboard = ReplyKeyboardMarkup (
         ]
     ], resize_keyboard= True
 )
+
+command_delete_keyboard = ReplyKeyboardRemove()
