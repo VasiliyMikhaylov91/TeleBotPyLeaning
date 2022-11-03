@@ -27,8 +27,10 @@ class Database:
     def create_table_users(self):
         sql = '''
         CREATE TABLE Users(
-        id int NOT NULL
-        phone text
+        id int NOT NULL,
+        phone text)
+
+
         '''
         self.execute(sql, commit=True)
 

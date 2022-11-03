@@ -30,3 +30,4 @@ async def answer_help_comand(message: types.Message):
 @dp.message_handler(commands='add')
 async def answer_add_comand(message: types.Message):
     await message.reply(text=f'Я не умею пока ничего добавлять')
+
