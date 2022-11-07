@@ -1,23 +1,25 @@
 from aiogram import types
 
 from keyboards import command_default_keyboard, command_delete_keyboard
-from loader import dp
-
+from loader import dp, db
 
 
 @dp.message_handler(commands='start')
 async def answer_start_comand(message: types.Message):
     await message.answer(text=f'Привет!'
-                                f'\nЯ немножко тупенький пока, мало что умею...',
+                              f'\nЯ немножко тупенький пока, мало что умею...',
                          reply_markup=command_default_keyboard)
+
 
 @dp.message_handler(commands='menu')
 async def answer_menu_comand(message: types.Message):
     await message.answer(text='ok', reply_markup=command_default_keyboard)
 
+
 @dp.message_handler(commands='dk')
 async def answer_dk_comand(message: types.Message):
     await message.answer(text='ok', reply_markup=command_delete_keyboard)
+
 
 @dp.message_handler(commands='help')
 async def answer_help_comand(message: types.Message):
@@ -27,7 +29,15 @@ async def answer_help_comand(message: types.Message):
                               f'/dk для скрытия кнопочек\n'
                               f'/help для получения справки')
 
+
 @dp.message_handler(commands='add')
 async def answer_add_comand(message: types.Message):
     await message.reply(text=f'Я не умею пока ничего добавлять')
 
+@dp.message_handler(content_types=['contact'])
+async def answer_contact_command(message: types.Message):
+    if message.contact.user_id == message.from_user.id:
+        await message.answer('Регистрация прошла успешно')
+        db.add_user(int(message.from_user.id), str(message.contact.phone_number))
+    else:
+        await message.answer('Увы')

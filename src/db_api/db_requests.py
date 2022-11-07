@@ -2,7 +2,7 @@ import sqlite3
 
 
 class Database:
-    def __init__(self, path: str ='shop_database.db'):
+    def __init__(self, path: str = 'shop_database.db'):
         self.db_path = path
 
     @property
@@ -28,9 +28,20 @@ class Database:
         sql = '''
         CREATE TABLE Users(
         id int NOT NULL,
-        phone text)
+        phone text
+        )
+        '''
+        self.execute(sql, commit=True)
 
-
+    def create_table_products(self):
+        sql = '''
+        CREATE TABLE Products(
+        id int NOT NULL,
+        name text NOT NULL,
+        prise real,
+        numbers integer,
+        photo_path text
+        )
         '''
         self.execute(sql, commit=True)
 
@@ -39,17 +50,22 @@ class Database:
         parameters = (id, phone)
         self.execute(sql, parameters=parameters, commit=True)
 
-    def select_user_info(self, **kwargs) -> list:
-        sql = 'SELECT * FROM Users WHERE '
+    def add_product(self, id: int, name: str, prise: float, numbers: int, photo_path: str):
+        sql = 'INSERT INTO Products(id, name, prise, numbers, photo_path) VALUES(?, ?, ?, ?, ?)'
+        parameters = (id, name, prise, numbers, photo_path)
+        self.execute(sql, parameters, commit=True)
+
+    def select_info(self, table_name: str, **kwargs) -> list:
+        sql = f'SELECT * FROM {table_name} WHERE '
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters=parameters, fetchall=True)
 
-    def select_all_users(self) -> list:
-        sql = 'SELECT * FROM Users'
+    def select_all(self, table_name: str) -> list:
+        sql = f'SELECT * FROM {table_name}'
         return self.execute(sql, fetchall=True)
 
     @staticmethod
-    def format_args(parameters: dict) -> tuple:
+    def format_args(sql, parameters: dict) -> tuple:
         sql += ' AND '.join([f'{item} = ?' for item in parameters])
         return sql, tuple(parameters.values())
 
@@ -57,13 +73,21 @@ class Database:
         sql = 'UPDATE Users SET phone=? WHERE id=?'
         return self.execute(sql, parameters=(phone, id), commit=True)
 
-    def delete_user(self, **kwargs):
-        sql = 'DELETE FROM Users WHERE '
+    def update_product_info(self, id: int, column: str, value):
+        sql = f'UPDATE Products SET {column}=? WHERE id=?'
+        return self.execute(sql, parameters=(value, id), commit=True)
+
+    def get_items_count(self, table_name: str):
+        sql = f'SELECT * FROM {table_name}'
+        return len(self.execute(sql, fetchall=True))
+
+    def delete_item(self, table_name: str, **kwargs):
+        sql = f'DELETE FROM {table_name} WHERE '
         sql, parameters = self.format_args(sql, kwargs)
         return self.execute(sql, parameters=parameters, commit=True)
 
-    def delete_all(self):
-        self.execute('DELETE FROM Users WHERE True', commit=True)
+    def delete_all(self, table_name: str):
+        self.execute(f'DELETE FROM {table_name} WHERE True', commit=True)
 
-    def drop_all(self):
-        self.execute('DROP TABLE Users', commit=True)
+    def drop_all(self, table_name: str):
+        self.execute(f'DROP TABLE {table_name}', commit=True)
