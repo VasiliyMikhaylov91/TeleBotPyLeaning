@@ -3,7 +3,7 @@ from aiogram.types import InputFile, InputMediaPhoto
 
 from keyboards import command_default_keyboard, command_delete_keyboard, get_item_inline_keyboard, \
     navigation_items_callback
-from loader import dp, db
+from loader import dp, db, bot
 
 
 @dp.message_handler(commands='start')
