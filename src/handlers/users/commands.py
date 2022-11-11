@@ -7,7 +7,7 @@ from loader import dp, db
 @dp.message_handler(commands='start')
 async def answer_start_comand(message: types.Message):
     await message.answer(text=f'Привет!'
-                              f'\nЯ немножко тупенький пока, мало что умею...',
+                              f'\nРад тебя видеть!!!',
                          reply_markup=command_default_keyboard)
 
 
@@ -41,3 +41,10 @@ async def answer_contact_command(message: types.Message):
         db.add_user(int(message.from_user.id), str(message.contact.phone_number))
     else:
         await message.answer('Увы')
+
+@dp.message_handler(commands=['product'])
+@dp.message_handler(text=['Список товаров'])
+async def answer_menu_command(message: types.Message):
+    first_product_info = db.select_info('Products', id=1)
+    first_product_info = first_product_info[0]
+    _, name, count, photo_path = first_product_info
